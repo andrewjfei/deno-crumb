@@ -1,0 +1,5 @@
+{
+    "tasks": {
+        "fmt": "deno fmt --use-tabs=false --indent-width=4 --single-quote=false --no-semicolons=false --line-width=80"
+    }
+}
