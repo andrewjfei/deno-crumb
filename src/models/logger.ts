@@ -10,18 +10,16 @@ class Logger {
     private _lightBlueText = "\x1b[94m";
     private _whiteText = "\x1b[37m";
 
-    private _appName: string;
     private _name: string;
 
     constructor(_name: string) {
-        this._appName = LoggerConfig.appName;
         this._name = _name;
     }
 
     debug(msg: string) {
         if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.DEBUG)) {
             console.log(
-                `${this._yellowText}[${this._appName}]${this._defaultText} ${this._whiteText}${LogLevel.DEBUG}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._whiteText}${msg}${this._defaultText}`,
+                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._whiteText}${LogLevel.DEBUG}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._whiteText}${msg}${this._defaultText}`,
             );
         }
     }
@@ -29,7 +27,7 @@ class Logger {
     info(msg: string) {
         if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.INFO)) {
             console.log(
-                `${this._yellowText}[${this._appName}]${this._defaultText} ${this._lightBlueText}${LogLevel.INFO}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._lightBlueText}${msg}${this._defaultText}`,
+                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._lightBlueText}${LogLevel.INFO}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._lightBlueText}${msg}${this._defaultText}`,
             );
         }
     }
@@ -37,7 +35,7 @@ class Logger {
     warn(msg: string) {
         if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.WARN)) {
             console.log(
-                `${this._yellowText}[${this._appName}]${this._defaultText} ${this._yellowText}${LogLevel.WARN}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._yellowText}${msg}${this._defaultText}`,
+                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._yellowText}${LogLevel.WARN}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._yellowText}${msg}${this._defaultText}`,
             );
         }
     }
@@ -45,7 +43,7 @@ class Logger {
     error(msg: string) {
         if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.ERROR)) {
             console.log(
-                `${this._yellowText}[${this._appName}]${this._defaultText} ${this._lightRedText}${LogLevel.ERROR}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._lightRedText}${msg}${this._defaultText}`,
+                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._lightRedText}${LogLevel.ERROR}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._lightRedText}${msg}${this._defaultText}`,
             );
         }
     }
