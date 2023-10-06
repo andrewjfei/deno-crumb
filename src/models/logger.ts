@@ -1,7 +1,7 @@
 import { LoggerConfig } from "../configs/mod.ts";
 import { LogLevel } from "../enums/mod.ts";
 import { LogLevelUtil } from "../utils/mod.ts";
-import { Timestamp } from "./mod.ts";
+import { ConsoleHandler, FileHandler, Timestamp } from "./mod.ts";
 
 class Logger {
     private _defaultText = "\x1b[0m";
@@ -17,41 +17,64 @@ class Logger {
     }
 
     debug(msg: string) {
-        if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.DEBUG)) {
-            console.log(
-                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._whiteText}${LogLevel.DEBUG}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._whiteText}${msg}${this._defaultText}`,
-            );
-        }
+        this._handleLogging(msg, LogLevel.DEBUG);
     }
 
     info(msg: string) {
-        if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.INFO)) {
-            console.log(
-                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._lightBlueText}${LogLevel.INFO}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._lightBlueText}${msg}${this._defaultText}`,
-            );
-        }
+        this._handleLogging(msg, LogLevel.INFO);
     }
 
     warn(msg: string) {
-        if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.WARN)) {
-            console.log(
-                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._yellowText}${LogLevel.WARN}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._yellowText}${msg}${this._defaultText}`,
-            );
-        }
+        this._handleLogging(msg, LogLevel.WARN);
     }
 
     error(msg: string) {
-        if (LogLevelUtil.compare(LoggerConfig.level, LogLevel.ERROR)) {
-            console.log(
-                `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${this._lightRedText}${LogLevel.ERROR}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${this._lightRedText}${msg}${this._defaultText}`,
-            );
-        }
+        this._handleLogging(msg, LogLevel.ERROR);
     }
 
     // helper methods
 
     private _getTimestamp(): string {
         return new Timestamp().toUtcTimestamp();
+    }
+
+    private _logToFile(filePath: string, log: string) {
+        Deno.writeTextFileSync(filePath, log, { append: true, create: true });
+    }
+
+    private _handleLogging(msg: string, logLevel: LogLevel): void {
+        let textColour: string | null;
+
+        switch (logLevel) {
+            case LogLevel.DEBUG:
+                textColour = this._whiteText;
+                break;
+            case LogLevel.INFO:
+                textColour = this._lightBlueText;
+                break;
+            case LogLevel.WARN:
+                textColour = this._yellowText;
+                break;
+            case LogLevel.ERROR:
+                textColour = this._lightRedText;
+                break;
+            default:
+                textColour = this._defaultText;
+        }
+
+        if (LogLevelUtil.compare(LoggerConfig.level, logLevel)) {
+            LoggerConfig.handlers.forEach((handler) => {
+                if (handler instanceof ConsoleHandler) {
+                    const log =
+                        `${this._yellowText}[${LoggerConfig.appName}]${this._defaultText} ${textColour}${logLevel}${this._defaultText}\t${this._getTimestamp()} ${this._yellowText}[${this._name}]${this._defaultText} ${textColour}${msg}${this._defaultText}`;
+                    console.log(log);
+                } else if (handler instanceof FileHandler) {
+                    const log =
+                        `[${LoggerConfig.appName}] ${logLevel}\t${this._getTimestamp()} [${this._name}] ${msg}\n`;
+                    this._logToFile(handler.filePath, log);
+                }
+            });
+        }
     }
 }
 
