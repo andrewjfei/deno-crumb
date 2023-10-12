@@ -9,7 +9,7 @@ LoggerConfig.setUp({
         (_msg: string, _logLevel: LogLevel, _loggerName: string) => {
             console.log("console log from an interceptor function");
         },
-    ]
+    ],
 });
 
 const logger: Logger = new Logger("interceptor");

@@ -103,9 +103,11 @@ file in the root directory.
 
 ### Interceptors
 
-An interceptor is a function which is executed before any logging occurs (i.e. outputted to the console or written to a file).
+An interceptor is a function which is executed before any logging occurs (i.e.
+outputted to the console or written to a file).
 
-This can be useful in situations where you want certain actions to be performed on every log (i.e. writing to a log management platform).
+This can be useful in situations where you want certain actions to be performed
+on every log (i.e. writing to a log management platform).
 
 #### Example
 
@@ -121,7 +123,10 @@ LoggerConfig.setUp({
 });
 ```
 
-This is an example of configurting the logger with a single interceptor function. An interceptor function provides three arguments which can be used within the function, the message which is logged, the log level (i.e. `DEBUG`, `INFO`, `WARN`, `ERROR`), and the logger name.
+This is an example of configurting the logger with a single interceptor
+function. An interceptor function provides three arguments which can be used
+within the function, the message which is logged, the log level (i.e. `DEBUG`,
+`INFO`, `WARN`, `ERROR`), and the logger name.
 
 ## License
 

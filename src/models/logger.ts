@@ -43,32 +43,34 @@ class Logger {
     }
 
     private _handleInterceptors(msg: string, logLevel: LogLevel): void {
-        LoggerConfig.interceptors.forEach((interceptor) => interceptor(msg, logLevel, this._name));
+        LoggerConfig.interceptors.forEach((interceptor) =>
+            interceptor(msg, logLevel, this._name)
+        );
     }
 
     private _handleLogging(msg: string, logLevel: LogLevel): void {
-        this._handleInterceptors(msg, logLevel);
-
-        let textColour: string | null;
-
-        switch (logLevel) {
-            case LogLevel.DEBUG:
-                textColour = this._whiteText;
-                break;
-            case LogLevel.INFO:
-                textColour = this._lightBlueText;
-                break;
-            case LogLevel.WARN:
-                textColour = this._yellowText;
-                break;
-            case LogLevel.ERROR:
-                textColour = this._lightRedText;
-                break;
-            default:
-                textColour = this._defaultText;
-        }
-
         if (LogLevelUtil.compare(LoggerConfig.level, logLevel)) {
+            this._handleInterceptors(msg, logLevel);
+
+            let textColour: string | null;
+
+            switch (logLevel) {
+                case LogLevel.DEBUG:
+                    textColour = this._whiteText;
+                    break;
+                case LogLevel.INFO:
+                    textColour = this._lightBlueText;
+                    break;
+                case LogLevel.WARN:
+                    textColour = this._yellowText;
+                    break;
+                case LogLevel.ERROR:
+                    textColour = this._lightRedText;
+                    break;
+                default:
+                    textColour = this._defaultText;
+            }
+
             LoggerConfig.handlers.forEach((handler) => {
                 if (handler instanceof ConsoleHandler) {
                     const log =
