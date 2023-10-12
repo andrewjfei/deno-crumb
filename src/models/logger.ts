@@ -42,7 +42,13 @@ class Logger {
         Deno.writeTextFileSync(filePath, log, { append: true, create: true });
     }
 
+    private _handleInterceptors(msg: string, logLevel: LogLevel): void {
+        LoggerConfig.interceptors.forEach((interceptor) => interceptor(msg, logLevel, this._name));
+    }
+
     private _handleLogging(msg: string, logLevel: LogLevel): void {
+        this._handleInterceptors(msg, logLevel);
+
         let textColour: string | null;
 
         switch (logLevel) {
